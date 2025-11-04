@@ -1,0 +1,50 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 'Playwright Tests - ${{ matrix.browser }}'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        shards: [1, 2, 3]  # Run 3 parallel instances for each browser
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install ${{ matrix.browser }}
+
+      - name: Run Playwright tests in parallel
+        run: |
+          # Set browser type from matrix
+          export BROWSER_TYPE=${{ matrix.browser }}
+          npm run test:smoke:parallel
+        env:
+          CI: true
+          SHARD: ${{ matrix.shards }}/3
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-${{ matrix.browser }}-shard-${{ matrix.shards }}
+          path: test-results/
+          retention-days: 7

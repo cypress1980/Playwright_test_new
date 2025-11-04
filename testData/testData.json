@@ -1,0 +1,13 @@
+{
+    "url": "https://www.saucedemo.com/",
+    "credentials": {
+        "username": "standard_user",
+        "password": "secret_sauce"
+    },
+    "userInfo": {
+        "firstName": "John",
+        "lastName": "Mark",
+        "zipCode": "212222"
+    },
+    "expectedMessage": "Thank you for your order!"
+}

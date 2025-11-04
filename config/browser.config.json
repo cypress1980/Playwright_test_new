@@ -1,0 +1,21 @@
+{
+    "browserConfig": {
+        "viewport": {
+            "width": 1280,
+            "height": 720
+        },
+        "timeout": 30000,
+        "recordVideo": {
+            "dir": "test-results/videos/"
+        },
+        "screenshot": "only-on-failure"
+    },
+    "parallel": {
+        "workers": 3,
+        "retries": 2
+    },
+    "reporters": [
+        ["html", { "outputFolder": "test-results/html-report" }],
+        ["json", { "outputFile": "test-results/json-report.json" }]
+    ]
+}
